@@ -1,26 +1,34 @@
 import os
 
-# Paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_PATH = os.path.join(BASE_DIR, "data", "students.csv")
+DATA_DIR = os.path.join(BASE_DIR, "data")
 MODELS_DIR = os.path.join(BASE_DIR, "models")
 
-# Features
+DATA_PATH = os.path.join(DATA_DIR, "students.csv")
+CLASSIFIER_PATH = os.path.join(MODELS_DIR, "classifier.pkl")
+SCALER_PATH = os.path.join(MODELS_DIR, "scaler.pkl")
+METRICS_PATH = os.path.join(MODELS_DIR, "metrics.json")
+
 FEATURES = [
-    'study_hours_per_day', 'attendance_percent', 'assignments_completed',
-    'sleep_hours', 'previous_score', 'internet_usage_hours',
-    'participation_score', 'extra_tutoring', 'practice_tests_completed',
-    'stress_level'
+    "study_hours_per_day",
+    "attendance_percent",
+    "assignments_completed",
+    "sleep_hours",
+    "previous_score",
+    "internet_usage_hours",
+    "participation_score",
+    "extra_tutoring",
+    "practice_tests_completed",
+    "stress_level",
 ]
 
-# Targets
-REGRESSION_TARGET = 'final_exam_score'
-CLASSIFICATION_TARGET = 'pass_fail'
+TARGET_COLUMN = "pass_fail"
+SCORE_COLUMN = "final_exam_score"
 
-# Clustering
-N_CLUSTERS = 3
-CLUSTER_NAMES = {
-    0: "High Performers",
-    1: "Average Students",
-    2: "At-Risk Students"
+RANDOM_STATE = 42
+TEST_SIZE = 0.2
+
+PASS_LABELS = {
+    0: "Likely Fail",
+    1: "Likely Pass",
 }

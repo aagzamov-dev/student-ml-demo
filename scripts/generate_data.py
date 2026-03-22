@@ -1,10 +1,23 @@
-import pandas as pd
-import numpy as np
+import argparse
 import os
+import sys
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from src.config import DATA_PATH
 
-def generate_student_data(n_samples=1000):
-    np.random.seed(42)
+
+def generate_student_data(n_samples=1000, seed=42):
+    if n_samples < 50:
+        raise ValueError("Please generate at least 50 samples so the train/test split remains meaningful.")
+
+    np.random.seed(seed)
     
     # Independent Features
     study_hours = np.random.uniform(1, 12, n_samples)
@@ -56,4 +69,8 @@ def generate_student_data(n_samples=1000):
     print(f"Dataset generated at {DATA_PATH} with {n_samples} rows.")
 
 if __name__ == "__main__":
-    generate_student_data()
+    parser = argparse.ArgumentParser(description="Generate a synthetic student performance dataset.")
+    parser.add_argument("--samples", type=int, default=1000, help="Number of student rows to generate.")
+    parser.add_argument("--seed", type=int, default=42, help="Random seed for reproducible data generation.")
+    args = parser.parse_args()
+    generate_student_data(n_samples=args.samples, seed=args.seed)

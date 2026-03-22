@@ -15,8 +15,8 @@ RUN pip3 install -r requirements.txt
 COPY . .
 
 # Generate data and train models during build
-RUN python scripts/generate_data.py && python scripts/train_models.py
+RUN python3 scripts/generate_data.py && python3 scripts/train_models.py
 
 EXPOSE 7860
 
-ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=7860", "--server.address=0.0.0.0"]
+ENTRYPOINT ["python3", "-m", "streamlit", "run", "app.py", "--server.port=7860", "--server.address=0.0.0.0"]

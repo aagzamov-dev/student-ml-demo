@@ -15,4 +15,5 @@ def preprocess_features(df, scaler=None):
 
 def get_sample_input(data_dict):
     """Converts UI inputs into a DataFrame for prediction."""
-    return pd.DataFrame([data_dict])
+    ordered = {feature: data_dict[feature] for feature in FEATURES}
+    return pd.DataFrame([ordered], columns=FEATURES)

@@ -1,25 +1,15 @@
-import numpy as np
-from src.config import CLUSTER_NAMES
+from src.config import PASS_LABELS
 
-def predict_performance(models, input_df):
-    """Runs all three ML tasks for a given student profile."""
-    # Scale input
-    X_scaled = models['scaler'].transform(input_df)
-    
-    # Regression
-    reg_pred = models['regression'].predict(X_scaled)[0]
-    
-    # Classification
-    clf_prob = models['classifier'].predict_proba(X_scaled)[0][1]
-    clf_pred = 1 if clf_prob >= 0.5 else 0
-    
-    # Clustering
-    cluster_id = models['kmeans'].predict(X_scaled)[0]
-    cluster_name = CLUSTER_NAMES[cluster_id]
-    
+
+def predict_student_outcome(model_bundle, input_df):
+    """Predict whether a student is likely to pass."""
+    X_scaled = model_bundle["scaler"].transform(input_df)
+    pass_probability = float(model_bundle["classifier"].predict_proba(X_scaled)[0][1])
+    predicted_class = int(pass_probability >= 0.5)
+
     return {
-        'score': round(float(reg_pred), 2),
-        'pass_fail': "PASS" if clf_pred == 1 else "FAIL",
-        'pass_prob': round(float(clf_prob) * 100, 2),
-        'cluster': cluster_name
+        "prediction": PASS_LABELS[predicted_class],
+        "pass_probability": round(pass_probability * 100, 2),
+        "risk_probability": round((1 - pass_probability) * 100, 2),
+        "predicted_class": predicted_class,
     }
